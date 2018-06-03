@@ -1,0 +1,22 @@
+{
+  "name": "mws-restaurant",
+  "version": "0.1.0",
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "es6": true,
+      "serviceworker": true
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/endotnick/mws-restaurant-stage-1"
+  },
+  "devDependencies": {
+    "gulp": "3.9.1",
+    "gulp-eslint": "^4.0.2",
+    "gulp-uglify": "^3.0.0",
+    "pump": "^3.0.0"
+  },
+  "dependencies": {}
+}
