@@ -8,7 +8,7 @@ body,td,th,p{
 	line-height: 1.5;
 }
 body {
-	background-color: #fdfdfd;
+	background-color: #f3f3f3;
 	margin: 0;
 	position:relative;
 }
@@ -221,6 +221,7 @@ nav h1 a {
 .inside #footer {
   padding: 25px 0px;
 }
+
 #restaurant-titles {
   width: 100%;
   display: flex;  
@@ -261,11 +262,15 @@ nav h1 a {
   border-top: 1px solid #fff;
   display: flex;
   flex-wrap: wrap;
-  /*padding: 140px 40px 30px;
+  
 }
-#reviews-container {
-  padding: 30px 40px 80px; */
+#restaurant-hours {
+  margin: 0 auto;
 }
+#restaurant-hours td {
+  color: #666;
+}
+
 #reviews-container h2 {
   color: #f58500;
   font-size: 24pt;
@@ -276,30 +281,54 @@ nav h1 a {
   text-align: center;
 }
 #reviews-list {
-  margin: 0;
+  margin: 0 auto;
   padding: 0;
+  display: flex;
+  flex-wrap: wrap;
 }
 #reviews-list li {
   background-color: #fff;
-    border: 2px solid #f3f3f3;
+  border: 2px solid #f3f3f3;
   display: block;
   list-style-type: none;
-  margin: 0 0 30px;
+  margin: 10px auto;
   overflow: hidden;
-  padding: 0 20px 20px;
   position: relative;
   width: 85%;
+  max-width: 350px;
+  border-radius: 2em 0;
 }
-#reviews-list li p {
-  margin: 0 0 10px;
+.review-comments {
+  margin: 0 0 1em;
+  padding: 1em;
 }
-#restaurant-hours {
-  margin: 0 auto;
+.review-header {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  background-color: #333;  
 }
-#restaurant-hours td {
-  color: #666;
+.review-name{
+  color: #FFF;
+  padding: 0 1em;
+  font-size: 1.5em;
 }
-
+.review-date {
+  margin: 0 0 0 auto;
+  padding: 1.5em 1em 0 0;
+  color: #CCC;
+}
+.review-rating {
+  margin-left: 1em;
+  padding: 0.2em 0.7em;
+  border-radius: .3em;
+  width: 6em;
+  background-color: #ffa500;
+  color: #FFF;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: .1em;
+}
 
 /* ====================== Responsive ====================== */
 @media screen and (max-width: 413px) {
@@ -362,7 +391,7 @@ nav h1 a {
   .filter-options h2 {
     margin: 0 auto 0 20px;
   }
-  #restaurants-list li, .filter-options select {
+  #restaurants-list li, .filter-options select, #reviews-list li {
     width: calc(100% / 2 - 40px);   
   }
   #restaurant-address {
@@ -392,7 +421,7 @@ nav h1 a {
   }
 }
 @media screen and (min-width: 975px) {
-  #restaurants-list li {
+  #restaurants-list li, #reviews-list li {
     width: calc(100% / 3 - 30px);
   }  
   #restaurant-hours {
