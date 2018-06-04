@@ -1,6 +1,5 @@
 responsive design      
-    + Use responsive images that adjust for the dimensions and resolution of any mobile device
-        - +setup grunt    
+    + Use responsive images that adjust for the dimensions and resolution of any mobile device   
 
 accessibility
     + test tab targets
