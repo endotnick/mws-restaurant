@@ -10,29 +10,20 @@
     <title>Restaurant Info</title>
   </head>
   <body class="inside">
-    <!-- Beginning header -->
-    <header>
-      <!-- Beginning nav -->
+    <header>      
       <nav>
         <h1><a href="/">Restaurant Reviews</a></h1>
-        <!-- Beginning breadcrumb -->
+        <a id="skip-to-content" class="screen-reader-text" href="#restaurant-container">Skip to main (press enter)</a>
         <ul id="breadcrumb" >
           <li><a href="/">Home</a></li>
         </ul>
-        <!-- End breadcrumb -->
       </nav>
-      <!-- End nav -->
     </header>
-    <!-- End header -->
 
-    <!-- Beginning main -->
     <main id="maincontent">
-      <!-- Beginning map -->
       <section id="map-container">
         <div id="map"></div>
       </section>
-      <!-- End map -->
-      <!-- Beginning restaurant -->
       <section id="restaurant-container">
         <div id="restaurant-titles">
           <h1 id="restaurant-name"></h1>
@@ -44,19 +35,13 @@
           <table id="restaurant-hours"></table>
         </div>
       </section>
-      <!-- end restaurant -->
-      <!-- Beginning reviews -->
       <section id="reviews-container">
         <ul id="reviews-list"></ul>
       </section>
-      <!-- End reviews -->
-      <!-- Beginning footer -->
       <footer id="footer">
         Copyright (c) 2017 <a href="/"><strong>Restaurant Reviews</strong></a> All Rights Reserved.
       </footer>
-      <!-- End footer -->
     </main>
-    <!-- End main -->
     <!-- Beginning scripts -->
     <!-- Database helpers -->
     <script type="text/javascript" src="js/dbhelper.js"></script>

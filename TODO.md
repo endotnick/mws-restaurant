@@ -1,9 +1,4 @@
-responsive design      
-    + Use responsive images that adjust for the dimensions and resolution of any mobile device   
-
-accessibility
-    + test tab targets
-    + screen readers
+accessibility 
     + a11y audit
 
 offline
