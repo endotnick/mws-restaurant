@@ -1,5 +1,4 @@
 # How to run:
-
     build the project from the working directory:
     
         `npm install`
