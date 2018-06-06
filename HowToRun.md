@@ -1,11 +1,11 @@
 # How to run:
-    build the project from the working directory:
+    build the project from the root directory:
     
         `npm install`
         
         `gulp build`
         
-    launch a webserver at on port 8000:
+    launch a webserver on port 8000:
     
         `python -m http.server 8000`    
         
