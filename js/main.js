@@ -8,10 +8,23 @@ var markers = []
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
 document.addEventListener('DOMContentLoaded', (event) => {
+  registerServiceWorker();
   fetchNeighborhoods();
   fetchCuisines();
 });
 
+
+/**
+ * Register Servcie Worker
+ */
+registerServiceWorker = () => {
+  if(!navigator.serviceWorker) return;
+  navigator.serviceWorker.register('/js/sw.js').then(function() {
+    console.log('Service worker registered!');
+  }).catch(function() {
+    console.log('Registration failed!');
+  });
+}
 /**
  * Fetch all neighborhoods and set their HTML.
  */
@@ -148,10 +161,10 @@ createRestaurantHTML = (restaurant) => {
   let filename = DBHelper.imageUrlForRestaurant(restaurant); // '/img/1.jpg'  
   filename = filename.replace(/(\/img\/)|(\.jpg)/g, ''); // '1'  
   sizes.forEach (function(size) {
-    sources += `/build/img/${filename}-${size}px.jpg ${size}w, `;
+    sources += `/build/img/${filename}-${size}px.webp ${size}w, `;
   });
   image.setAttribute('srcset', sources)
-  image.src = `/build/img/${filename}-400px.jpg`;  
+  image.src = `/build/img/${filename}-400px.webp`;  
   image.setAttribute('alt', restaurant.alt);
   li.append(image);
 
