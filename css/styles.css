@@ -22,6 +22,7 @@ a {
 	text-decoration: none;
 }
 a:hover, a:focus {
+  outline: 3px solid orange;
 	color: #3397db;
 	text-decoration: none;
 }
@@ -53,7 +54,7 @@ section {
   text-transform: uppercase;
 }
 
-main, nav, header, .inside #footer {
+main, nav, header, .inside #footer, .inside #nav-wrapper {
   width: 100%;
   margin: 0 auto;
 }
@@ -75,6 +76,7 @@ nav h1 a {
   letter-spacing: 10px;
   text-transform: uppercase;
 }
+
 #breadcrumb {
     padding: 10px 0px;
     list-style: none;
@@ -206,7 +208,7 @@ nav h1 a {
 .inside header {
   height: 125px;
 }
-.inside nav {
+.inside #nav-wrapper {
   position: fixed;
   z-index: 1000;
 }
@@ -442,7 +444,7 @@ nav h1 a {
   }
 }
 @media screen and (min-width: 1250px) {
-  main, nav, header, .inside #footer {
+  main, nav, header, .inside #footer, .inside #nav-wrapper{
     max-width: 1250px;
     margin: 0 auto;
   }

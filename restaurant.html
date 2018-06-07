@@ -10,23 +10,27 @@
     <title>Restaurant Info</title>
   </head>
   <body class="inside">
-    <header>      
-      <nav>
-        <h1><a href="/">Restaurant Reviews</a></h1>
-        <a id="skip-to-content" class="screen-reader-text" href="#restaurant-container">Skip to main (press enter)</a>
-        <ul id="breadcrumb" >
-          <li><a href="/">Home</a></li>
-        </ul>
-      </nav>
+    <header>  
+      <div id="nav-wrapper">
+        <nav>
+          <h1><a href="/">Restaurant Reviews</a></h1>
+          <a id="skip-to-content" class="screen-reader-text" href="#restaurant-container">Skip to main (press enter)</a>
+        </nav>
+        <nav aria-label="Breadcrumb">
+          <ul id="breadcrumb">
+            <li><a href="/">Home</a></li>
+          </ul>
+        </nav>
+      </div>
     </header>
 
     <main id="maincontent">
       <section id="map-container">
-        <div id="map"></div>
+        <div id="map" role="application"></div>
       </section>
       <section id="restaurant-container">
         <div id="restaurant-titles">
-          <h1 id="restaurant-name"></h1>
+          <h2 id="restaurant-name"></h2>
           <p id="restaurant-address"></p>
         </div>
         <img id="restaurant-img">
