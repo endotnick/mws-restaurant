@@ -9,11 +9,9 @@ For this stage of the project, I was provided with a static website and made the
 
 ## To Run:
 ---
-### Install Dependencies:
-
+### Installation:
+    git clone https://github.com/endotnick/mws-restaurant-stage-1.git
     npm install
-### Build the project:
-
     gulp build
 ### Launch a webserver on port 8000:
 
