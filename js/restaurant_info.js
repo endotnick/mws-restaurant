@@ -4,7 +4,7 @@ var map;
 /**
  * Initialize Google map, called from HTML.
  */
-window.initMap = () => {
+window.initMapRestaurant = () => {
   fetchRestaurantFromURL((error, restaurant) => {
     if (error) { // Got an error!
       console.error(error);
@@ -12,28 +12,28 @@ window.initMap = () => {
       self.map = new google.maps.Map(document.getElementById('map'), {
         zoom: 16,
         center: restaurant.latlng,
-        scrollwheel: false
+        scrollwheel: false,
       });
       google.maps.event.addListenerOnce(self.map, 'idle', () => {
-        document.getElementsByTagName('iframe')[0].title = "Google Map";
+        document.getElementsByTagName('iframe')[0].title = 'Google Map';
       });
       fillBreadcrumb();
       DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
     }
   });
-}
+};
 
 /**
  * Get current restaurant from page URL.
  */
 fetchRestaurantFromURL = (callback) => {
   if (self.restaurant) { // restaurant already fetched!
-    callback(null, self.restaurant)
+    callback(null, self.restaurant);
     return;
   }
   const id = getParameterByName('id');
   if (!id) { // no id found in URL
-    error = 'No restaurant id in URL'
+    error = 'No restaurant id in URL';
     callback(error, null);
   } else {
     DBHelper.fetchRestaurantById(id, (error, restaurant) => {
@@ -43,10 +43,10 @@ fetchRestaurantFromURL = (callback) => {
         return;
       }
       fillRestaurantHTML();
-      callback(null, restaurant)
+      callback(null, restaurant);
     });
   }
-}
+};
 
 /**
  * Create restaurant HTML and add it to the webpage
@@ -59,16 +59,16 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   address.innerHTML = restaurant.address;
 
   const image = document.getElementById('restaurant-img');
-  image.className = 'restaurant-img'
+  image.className = 'restaurant-img';
   const sizes = [200, 400, 600, 800];
   let sources = '';
-  let filename = DBHelper.imageUrlForRestaurant(restaurant); // '/img/1.jpg'  
+  let filename = DBHelper.imageUrlForRestaurant(restaurant); // '/img/1.jpg'
   filename = filename.replace(/(\/img\/)|(\.jpg)/g, ''); // '1'
-  sizes.forEach (function(size) {
+  sizes.forEach ((size) => {
     sources += `/build/img/${filename}-${size}px.webp ${size}w, `;
   });
-  image.setAttribute('srcset', sources)
-  image.src = `/build/img/${filename}-400px.webp`;  
+  image.setAttribute('srcset', sources);
+  image.src = `/build/img/${filename}-400px.webp`;
   image.setAttribute('alt', restaurant.alt);
 
   const cuisine = document.getElementById('restaurant-cuisine');
@@ -80,7 +80,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   }
   // fill reviews
   fillReviewsHTML();
-}
+};
 
 /**
  * Create restaurant operating hours HTML table and add it to the webpage.
@@ -100,7 +100,7 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
 
     hours.appendChild(row);
   }
-}
+};
 
 /**
  * Create all reviews HTML and add them to the webpage.
@@ -118,11 +118,11 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
     return;
   }
   const ul = document.getElementById('reviews-list');
-  reviews.forEach(review => {
+  reviews.forEach((review) => {
     ul.appendChild(createReviewHTML(review));
   });
   container.appendChild(ul);
-}
+};
 
 /**
  * Create review HTML and add it to the webpage.
@@ -131,7 +131,7 @@ createReviewHTML = (review) => {
   const li = document.createElement('li');
   const header = document.createElement('div');
   header.className = 'review-header';
-  li.setAttribute('tabindex', '0')
+  li.setAttribute('tabindex', '0');
   li.appendChild(header);
 
   const name = document.createElement('p');
@@ -155,7 +155,7 @@ createReviewHTML = (review) => {
   li.appendChild(comments);
 
   return li;
-}
+};
 
 /**
  * Add restaurant name to the breadcrumb navigation menu
@@ -166,7 +166,7 @@ fillBreadcrumb = (restaurant=self.restaurant) => {
   li.setAttribute('aria-role', 'Current Page');
   li.innerHTML = restaurant.name;
   breadcrumb.appendChild(li);
-}
+};
 
 /**
  * Get a parameter by name from page URL.
@@ -182,4 +182,4 @@ getParameterByName = (name, url) => {
   if (!results[2])
     return '';
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
-}
+};

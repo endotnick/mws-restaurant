@@ -78,36 +78,36 @@ nav h1 a {
 }
 
 #breadcrumb {
-    padding: 10px 0px;
-    list-style: none;
-    background-color: #eee;
-    font-size: 17px;
-    width: 100%;
-    margin: 0;
+  padding: 10px 0px;
+  list-style: none;
+  background-color: #eee;
+  font-size: 17px;
+  width: 100%;
+  margin: 0;
 }
 
 /* Display list items side by side */
 #breadcrumb li {
-    display: inline;
+  display: inline;
 }
 
 /* Add a slash symbol (/) before/behind each list item */
 #breadcrumb li+li:before {
-    padding: 8px;
-    color: black;
-    content: "/\00a0";
+  padding: 8px;
+  color: black;
+  content: "/\00a0";
 }
 
 /* Add a color to all links inside the list */
 #breadcrumb li a {
-    color: #026AC5;
-    text-decoration: none;
+  color: #026AC5;
+  text-decoration: none;
 }
 
 /* Add a color on mouse-over */
 #breadcrumb li a:hover {
-    color: #01447e;
-    text-decoration: underline;
+  color: #01447e;
+  text-decoration: underline;
 }
 /* ====================== Map ====================== */
 #map {
