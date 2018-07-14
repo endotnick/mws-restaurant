@@ -11,7 +11,7 @@ const gutil = require('gulp-util');
 const pump = require('pump');
 const babel = require('gulp-babel');
 
-gulp.task('default', ['build', 'watch']);
+gulp.task('default', ['dev', 'watch']);
 gulp.task('clean', () =>
   del(['build']));
 
@@ -111,4 +111,4 @@ gulp.task('dev', ['clean', 'lint', 'scripts', 'images']);
 gulp.task('dist', ['clean', 'lint', 'scripts-dist', 'images']);
 
 gulp.task('watch', () =>
-  gulp.watch('js/*.js', ['lint']));
+  gulp.watch('js/*.js', ['lint', 'scripts']));
