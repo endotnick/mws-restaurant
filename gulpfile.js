@@ -16,7 +16,7 @@ gulp.task('clean', () =>
   del(['build', './sw.js']));
 
 gulp.task('images', () =>
-  gulp.src('img/*.jpg')
+  gulp.src('src/img/*.jpg')
     .pipe(webp())
     .pipe(responsive(
       {
