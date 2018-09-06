@@ -1,10 +1,9 @@
 const path = require('path');
 
 module.exports = {
-  mode: 'development',
+  mode: 'production',
   entry: {
     main: './js/main.js',
-    dbhelper: './js/dbhelper.js',
     restaurant_info: './js/restaurant_info.js',
   },
   output: {
