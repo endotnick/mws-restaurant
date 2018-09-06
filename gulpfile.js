@@ -5,10 +5,15 @@ const webp = require('gulp-webp');
 const lint = require('gulp-eslint');
 const webpack = require('webpack-stream');
 const webpackConfig = require('./webpack.config');
+const runSequence = require('run-sequence')
 
 gulp.task('default', ['dev', 'watch']);
+
+gulp.task('del_compiledSW', () =>
+  del(['build/js/sw.js']));
+
 gulp.task('clean', () =>
-  del(['build']));
+  del(['build', './sw.js']));
 
 gulp.task('images', () =>
   gulp.src('img/*.jpg')
@@ -56,17 +61,24 @@ gulp.task('images', () =>
     .pipe(gulp.dest('build/img')));
 
 gulp.task('lint', () =>
-  gulp.src(['*.js'])
+  gulp.src(['src/js/*.js'])
     .pipe(lint())
     .pipe(lint.format()));
 
-gulp.task('pack', () => 
+gulp.task('pack', () =>
   webpack(webpackConfig)
     .pipe(gulp.dest('build/js/')));
 
-gulp.task('dev', ['clean', 'lint', 'pack', 'images']);
+gulp.task('cp_sw', () =>
+  gulp.src('./build/js/sw.js')
+    .pipe(gulp.dest('./')));
 
-gulp.task('prod', ['clean', 'pack', 'images']);
+gulp.task('compile', () =>
+  runSequence('pack', 'cp_sw', 'del_compiledSW'));
+
+gulp.task('dev', ['clean', 'lint', 'compile', 'images']);
+
+gulp.task('prod', ['clean', 'compile', 'images']);
 
 gulp.task('watch', () =>
-  gulp.watch('js/*.js', ['lint', 'pack']));
+  gulp.watch('src/js/*.js', ['lint', 'compile']));

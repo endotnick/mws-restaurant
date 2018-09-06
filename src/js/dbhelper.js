@@ -20,30 +20,9 @@ export default class DBHelper {
     fetch(target)
       .then(response => response.json())
       .then(restaurants => callback(null, restaurants))
-      /*
-      .then((json) => {
-        console.log(json);
-      })
-      */
       .catch((error) => {
         console.error(error);
       });
-    /*
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', DBHelper.DATABASE_URL);
-    console.log('xhr opened');
-    xhr.onload = () => {
-      if (xhr.status === 200) { // Got a success response from server!
-        const restaurants = JSON.parse(xhr.responseText);
-        console.log(restaurants);                   // TODO: Remove
-        callback(null, restaurants);
-      } else { // Oops!. Got an error from server.
-        const error = (`Request failed. Returned status of ${xhr.status}`);
-        callback(error, null);
-      }
-    };
-    xhr.send();
-    */
   }
 
   /**

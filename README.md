@@ -14,7 +14,7 @@ Clone the repository and build the project. Images are generated using gulp, so 
 
     git clone https://github.com/endotnick/mws-restaurant-stage-1.git
     npm install
-    gulp build
+    npm run build
 ### Launch a webserver on port 8000:
 
     python3 -m http.server 8000   

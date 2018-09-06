@@ -3,8 +3,9 @@ const path = require('path');
 module.exports = {
   mode: 'production',
   entry: {
-    main: './js/main.js',
-    restaurant_info: './js/restaurant_info.js',
+    main: './src/js/main.js',
+    restaurant_info: './src/js/restaurant_info.js',
+    sw: './src/js/sw.js',
   },
   output: {
     path: path.resolve(__dirname, 'build/js/'),
