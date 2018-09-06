@@ -1,27 +1,40 @@
 /**
  * Common database helper functions.
  */
-class DBHelper {
-
+export default class DBHelper {
   /**
    * Database URL.
    * Change this to restaurants.json file location on your server.
    */
   static get DATABASE_URL() {
-    const port = 1337 // Change this to your server port: default 8000
+    const port = 1337; // Change this to your server port: default 8000
     return `http://localhost:${port}/restaurants`; // ${port}/data/restaurants.json
   }
 
   /**
    * Fetch all restaurants.
    */
-  static fetchRestaurants(callback) {
-    let xhr = new XMLHttpRequest();
+  static fetchRestaurants(callback, id) {
+    // use fetch API instead
+    const target = id ? `${DBHelper.DATABASE_URL}/${id}` : DBHelper.DATABASE_URL;
+    fetch(target)
+      .then(response => response.json())
+      .then(restaurants => callback(null, restaurants))
+      /*
+      .then((json) => {
+        console.log(json);
+      })
+      */
+      .catch((error) => {
+        console.error(error);
+      });
+    /*
+    const xhr = new XMLHttpRequest();
     xhr.open('GET', DBHelper.DATABASE_URL);
-    console.log("xhr opened");
+    console.log('xhr opened');
     xhr.onload = () => {
       if (xhr.status === 200) { // Got a success response from server!
-        const restaurants = JSON.parse(xhr.responseText);        
+        const restaurants = JSON.parse(xhr.responseText);
         console.log(restaurants);                   // TODO: Remove
         callback(null, restaurants);
       } else { // Oops!. Got an error from server.
@@ -30,6 +43,7 @@ class DBHelper {
       }
     };
     xhr.send();
+    */
   }
 
   /**
@@ -151,7 +165,7 @@ class DBHelper {
    * Restaurant image URL.
    */
   static imageUrlForRestaurant(restaurant) {
-    return (`/img/${restaurant.photograph}`);
+    return restaurant.photograph ? `/img/${restaurant.photograph}` : `/img/${restaurant.id}.jpg`;
   }
 
   /**
@@ -167,5 +181,4 @@ class DBHelper {
     );
     return marker;
   }
-
 }
