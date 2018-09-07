@@ -5,7 +5,7 @@ const webp = require('gulp-webp');
 const lint = require('gulp-eslint');
 const webpack = require('webpack-stream');
 const webpackConfig = require('./webpack.config');
-const runSequence = require('run-sequence')
+const runSequence = require('run-sequence');
 
 gulp.task('default', ['dev', 'watch']);
 
