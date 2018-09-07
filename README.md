@@ -1,11 +1,22 @@
 # Mobile Web Specialist Certification Course
 ---
-## Project Submission: Stage 1
+## Project Submission: Stage 2
+
+For this stage of the project, I was tasked with updating my project to make the following improvements:
+1. Use server data instead of local memory
+2. Use IndexedDB to cache JSON responses
+3. Meet the minimum performance requirements
+    - Progressive Web App score should be at 90 or better.
+    - Performance score should be at 70 or better.
+    - Accessibility score should be at 90 or better.
+
+### Previous Stages:
+#### Stage 1
 
 For this stage of the project, I was provided with a static website and made the following improvements:
-- Made the site fully responsive
-- Improved accessibilty for all users
-- Implemented a Service Worker to cache and serve static assets
+1. Made the site fully responsive
+2. Improved accessibilty for all users
+3. Implemented a Service Worker to cache and serve static assets
 
 ## To Run:
 ---
@@ -19,5 +30,6 @@ Clone the repository and build the project. Images are generated using gulp, so 
 
     python3 -m http.server 8000   
 ### Navigate to localhost:8000
-
+---
+#### Credits
 Icon made by [iconnice](https://www.flaticon.com/authors/iconnice) from www.flaticon.com
