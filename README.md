@@ -34,10 +34,10 @@ Images are generated using gulp, so you'll need the gulp-cli installed locally (
     npm install
     npm run build
     
-### Launch a webserver from project folder:
+#### Launch a webserver from project folder:
     python3 -m http.server 8000   
 
-### Navigate to localhost:8000
+#### Navigate to localhost:8000
 ---
 #### Credits
 Icon made by [iconnice](https://www.flaticon.com/authors/iconnice) from www.flaticon.com
