@@ -21,20 +21,22 @@ For this stage of the project, I was provided with a static website and made the
 ## To Run:
 ---
 ### Installation:
-Clone the repository and build the project. Images are generated using gulp, so you'll need the gulp-cli installed locally (https://gulpjs.com/).
+#### Clone and run dev server:
+    git clone https://github.com/udacity/mws-restaurant-stage-2.git
+    npm install
+    npm install sails -g
+    node server
+    
+#### Clone the repository and build the project in separate folder: 
+Images are generated using gulp, so you'll need the gulp-cli installed locally (https://gulpjs.com/).
 
     git clone https://github.com/endotnick/mws-restaurant-stage-1.git
     npm install
     npm run build
     
-#### Clone and run dev server in a separate folder:
-    git clone https://github.com/udacity/mws-restaurant-stage-2.git
-    npm install
-    npm install sails -g
-    node server
-
-### Launch a webserver on port 8000:
+### Launch a webserver from project folder:
     python3 -m http.server 8000   
+
 ### Navigate to localhost:8000
 ---
 #### Credits
