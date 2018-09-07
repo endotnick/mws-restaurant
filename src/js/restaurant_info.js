@@ -99,7 +99,8 @@ const fillRestaurantHTML = (restaurant = self.restaurant) => {
   });
   image.setAttribute('srcset', sources);
   image.src = `/build/img/${filename}-400px.webp`;
-  image.setAttribute('alt', restaurant.alt);
+  const alt = restaurant.alt || `image for ${restaurant.name}`;
+  image.setAttribute('alt', alt);
 
   const cuisine = document.getElementById('restaurant-cuisine');
   cuisine.innerHTML = restaurant.cuisine_type;

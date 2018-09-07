@@ -31,7 +31,8 @@ const createRestaurantHTML = (restaurant) => {
   });
   image.setAttribute('srcset', sources);
   image.src = `/build/img/${filename}-400px.webp`;
-  image.setAttribute('alt', restaurant.alt);
+  const alt = restaurant.alt || `image for ${restaurant.name}`;
+  image.setAttribute('alt', alt);
   li.append(image);
 
   const name = document.createElement('h2');
