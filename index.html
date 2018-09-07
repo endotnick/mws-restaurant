@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
     <link rel="stylesheet" href="src/css/styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin=""/>
     <title>Restaurant Reviews</title>
   </head>
   <body>
@@ -23,10 +24,10 @@
         <div class="filter-options">
           <h2>Filter Results</h2>
           <div class="selectors">
-            <select aria-label="filter by neighborhood" id="neighborhoods-select" name="neighborhoods" onchange="window.initMapHome()">
+            <select aria-label="filter by neighborhood" id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()">
               <option value="all">All Neighborhoods</option>
             </select>
-            <select aria-label="filter by cuisine" id="cuisines-select" name="cuisines" onchange="window.initMapHome()">
+            <select aria-label="filter by cuisine" id="cuisines-select" name="cuisines" onchange="updateRestaurants()">
               <option value="all">All Cuisines</option>
             </select>
           </div>
@@ -37,7 +38,7 @@
         Copyright (c) 2017 <a href="/"><strong>Restaurant Reviews</strong></a> All Rights Reserved.
       </footer>
     </main>
+    <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js" integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw==" crossorigin=""></script>
     <script type="application/javascript" charset="utf-8" src="build/js/main.js"></script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBHaj4Vs1m2SLnTtc99RQi1Sb1sAUqLc8Q&libraries=places&callback=initMapHome"></script>
   </body>
 </html>

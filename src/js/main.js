@@ -1,5 +1,7 @@
 import DBHelper from './dbhelper';
 
+let newMap;
+
 /**
  * Register Servcie Worker
  */
@@ -119,7 +121,7 @@ const resetRestaurants = (restaurants) => {
 
   // Remove all map markers
   if (self.markers) {
-    self.markers.forEach(m => m.setMap(null));
+    self.markers.forEach(marker => marker.remove());
   }
   self.markers = [];
   self.restaurants = restaurants;
@@ -131,11 +133,12 @@ const resetRestaurants = (restaurants) => {
 const addMarkersToMap = (restaurants = self.restaurants) => {
   restaurants.forEach((restaurant) => {
     // Add marker to the map
-    const marker = DBHelper.mapMarkerForRestaurant(restaurant, self.map);
-    google.maps.event.addListener(marker, 'click', () => {
-      window.location.href = marker.url;
-    });
+    const marker = DBHelper.mapMarkerForRestaurant(restaurant, newMap);
+    function onClick() {
+      window.location.href = marker.options.url;
+    }
     self.markers.push(marker);
+    marker.on('click', onClick);
   });
 };
 
@@ -153,7 +156,7 @@ const fillRestaurantsHTML = (restaurants = self.restaurants) => {
 /**
  * Update page and map for current restaurants.
  */
-const updateRestaurants = () => {
+window.updateRestaurants = () => {
   const cSelect = document.getElementById('cuisines-select');
   const nSelect = document.getElementById('neighborhoods-select');
   const cIndex = cSelect.selectedIndex;
@@ -169,24 +172,24 @@ const updateRestaurants = () => {
     }
   });
 };
-
-/**
- * Initialize Google map, called from HTML.
- */
-window.initMapHome = () => {
-  const loc = {
-    lat: 40.722216,
-    lng: -73.987501,
-  };
-  self.map = new google.maps.Map(document.getElementById('map'), {
+/*
+* Initialize leaflet map, called from HTML.
+*/
+const initMap = () => {
+  newMap = L.map('map', {
+    center: [40.722216, -73.987501],
     zoom: 12,
-    center: loc,
-    scrollwheel: false,
+    scrollWheelZoom: false,
   });
-  google.maps.event.addListenerOnce(self.map, 'idle', () => {
-    document.getElementsByTagName('iframe')[0].title = 'Google Map';
-  });
-  updateRestaurants();
+  L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.jpg70?access_token={mapboxToken}', {
+    mapboxToken: 'pk.eyJ1IjoiZWxsaW1pc3QiLCJhIjoiY2psc2dmbmhhMGZ1YzNwbzRyd3Q4NzY4biJ9.ojVHoAqsHCVB9BfJX_ikWw',
+    maxZoom: 18,
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+      '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+      'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+    id: 'mapbox.streets',
+  }).addTo(newMap);
+  window.updateRestaurants();
 };
 
 /**
@@ -194,6 +197,7 @@ window.initMapHome = () => {
  */
 document.addEventListener('DOMContentLoaded', () => {
   registerServiceWorker();
+  initMap();
   fetchNeighborhoods();
   fetchCuisines();
 });

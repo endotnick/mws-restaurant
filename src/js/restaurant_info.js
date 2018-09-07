@@ -1,88 +1,7 @@
 import DBHelper from './dbhelper';
 
 let restaurant;
-var map;
-
-/**
- * Initialize Google map, called from HTML.
- */
-window.initMapRestaurant = () => {
-  fetchRestaurantFromURL((error, restaurant) => {
-    if (error) { // Got an error!
-      console.error(error);
-    } else {
-      self.map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 16,
-        center: restaurant.latlng,
-        scrollwheel: false,
-      });
-      google.maps.event.addListenerOnce(self.map, 'idle', () => {
-        document.getElementsByTagName('iframe')[0].title = 'Google Map';
-      });
-      fillBreadcrumb();
-      DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
-    }
-  });
-};
-
-/**
- * Get current restaurant from page URL.
- */
-const fetchRestaurantFromURL = (callback) => {
-  if (self.restaurant) { // restaurant already fetched!
-    callback(null, self.restaurant);
-    return;
-  }
-  const id = getParameterByName('id');
-  if (!id) { // no id found in URL
-    error = 'No restaurant id in URL';
-    callback(error, null);
-  } else {
-    DBHelper.fetchRestaurantById(id, (error, restaurant) => {
-      self.restaurant = restaurant;
-      if (!restaurant) {
-        console.error(error);
-        return;
-      }
-      fillRestaurantHTML();
-      callback(null, restaurant);
-    });
-  }
-};
-
-/**
- * Create restaurant HTML and add it to the webpage
- */
-const fillRestaurantHTML = (restaurant = self.restaurant) => {
-  const name = document.getElementById('restaurant-name');
-  name.innerHTML = restaurant.name;
-
-  const address = document.getElementById('restaurant-address');
-  address.innerHTML = restaurant.address;
-
-  const image = document.getElementById('restaurant-img');
-  image.className = 'restaurant-img';
-  const sizes = [200, 400, 600, 800];
-  let sources = '';
-  let filename = DBHelper.imageUrlForRestaurant(restaurant); // '/img/1.jpg'
-  filename = filename.replace(/(\/img\/)|(\.jpg)/g, ''); // '1'
-  sizes.forEach ((size) => {
-    sources += `/build/img/${filename}-${size}px.webp ${size}w, `;
-  });
-  image.setAttribute('srcset', sources);
-  image.src = `/build/img/${filename}-400px.webp`;
-  image.setAttribute('alt', restaurant.alt);
-
-  const cuisine = document.getElementById('restaurant-cuisine');
-  cuisine.innerHTML = restaurant.cuisine_type;
-
-  // fill operating hours
-  if (restaurant.operating_hours) {
-    fillRestaurantHoursHTML();
-  }
-  // fill reviews
-  fillReviewsHTML();
-};
+let newMap;
 
 /**
  * Create restaurant operating hours HTML table and add it to the webpage.
@@ -102,28 +21,6 @@ const fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hour
 
     hours.appendChild(row);
   }
-};
-
-/**
- * Create all reviews HTML and add them to the webpage.
- */
-const fillReviewsHTML = (reviews = self.restaurant.reviews) => {
-  const container = document.getElementById('reviews-container');
-  const title = document.createElement('h2');
-  title.innerHTML = 'Reviews';
-  container.appendChild(title);
-
-  if (!reviews) {
-    const noReviews = document.createElement('p');
-    noReviews.innerHTML = 'No reviews yet!';
-    container.appendChild(noReviews);
-    return;
-  }
-  const ul = document.getElementById('reviews-list');
-  reviews.forEach((review) => {
-    ul.appendChild(createReviewHTML(review));
-  });
-  container.appendChild(ul);
 };
 
 /**
@@ -160,9 +57,109 @@ const createReviewHTML = (review) => {
 };
 
 /**
+ * Create all reviews HTML and add them to the webpage.
+ */
+const fillReviewsHTML = (reviews = self.restaurant.reviews) => {
+  const container = document.getElementById('reviews-container');
+  const title = document.createElement('h2');
+  title.innerHTML = 'Reviews';
+  container.appendChild(title);
+
+  if (!reviews) {
+    const noReviews = document.createElement('p');
+    noReviews.innerHTML = 'No reviews yet!';
+    container.appendChild(noReviews);
+    return;
+  }
+  const ul = document.getElementById('reviews-list');
+  reviews.forEach((review) => {
+    ul.appendChild(createReviewHTML(review));
+  });
+  container.appendChild(ul);
+};
+
+/**
+ * Create restaurant HTML and add it to the webpage
+ */
+const fillRestaurantHTML = (restaurant = self.restaurant) => {
+  const name = document.getElementById('restaurant-name');
+  name.innerHTML = restaurant.name;
+
+  const address = document.getElementById('restaurant-address');
+  address.innerHTML = restaurant.address;
+
+  const image = document.getElementById('restaurant-img');
+  image.className = 'restaurant-img';
+  const sizes = [200, 400, 600, 800];
+  let sources = '';
+  let filename = DBHelper.imageUrlForRestaurant(restaurant); // '/img/1.jpg'
+  filename = filename.replace(/(\/img\/)|(\.jpg)/g, ''); // '1'
+  sizes.forEach((size) => {
+    sources += `/build/img/${filename}-${size}px.webp ${size}w, `;
+  });
+  image.setAttribute('srcset', sources);
+  image.src = `/build/img/${filename}-400px.webp`;
+  image.setAttribute('alt', restaurant.alt);
+
+  const cuisine = document.getElementById('restaurant-cuisine');
+  cuisine.innerHTML = restaurant.cuisine_type;
+
+  // fill operating hours
+  if (restaurant.operating_hours) {
+    fillRestaurantHoursHTML();
+  }
+  // fill reviews
+  fillReviewsHTML();
+};
+
+/**
+ * Get a parameter by name from page URL.
+ */
+const getParameterByName = (name, url) => {
+  if (!url) {
+    url = window.location.href;
+  }
+  name = name.replace(/[\[\]]/g, '\\$&');
+  const regex = new RegExp(`[?&]${name}(=([^&#]*)|&|#|$)`);
+  const results = regex.exec(url);
+  if (!results) {
+    return null;
+  }
+  if (!results[2]) {
+    return '';
+  }
+  return decodeURIComponent(results[2].replace(/\+/g, ' '));
+};
+
+/**
+ * Get current restaurant from page URL.
+ */
+const fetchRestaurantFromURL = (callback) => {
+  if (self.restaurant) { // restaurant already fetched!
+    callback(null, self.restaurant);
+    return;
+  }
+  const id = getParameterByName('id');
+  if (!id) { // no id found in URL
+    error = 'No restaurant id in URL';
+    callback(error, null);
+  } else {
+    DBHelper.fetchRestaurantById(id, (error, restaurant) => {
+      self.restaurant = restaurant;
+      if (!restaurant) {
+        console.error(error);
+        return;
+      }
+      fillRestaurantHTML();
+      callback(null, restaurant);
+    });
+  }
+};
+
+/**
  * Add restaurant name to the breadcrumb navigation menu
  */
-const fillBreadcrumb = (restaurant=self.restaurant) => {
+const fillBreadcrumb = (restaurant = self.restaurant) => {
   const breadcrumb = document.getElementById('breadcrumb');
   const li = document.createElement('li');
   li.setAttribute('aria-role', 'Current Page');
@@ -171,17 +168,35 @@ const fillBreadcrumb = (restaurant=self.restaurant) => {
 };
 
 /**
- * Get a parameter by name from page URL.
+ * Initialize leaflet map
  */
-const getParameterByName = (name, url) => {
-  if (!url)
-    url = window.location.href;
-  name = name.replace(/[\[\]]/g, '\\$&');
-  const regex = new RegExp(`[?&]${name}(=([^&#]*)|&|#|$)`),
-    results = regex.exec(url);
-  if (!results)
-    return null;
-  if (!results[2])
-    return '';
-  return decodeURIComponent(results[2].replace(/\+/g, ' '));
+const initMap = () => {
+  fetchRestaurantFromURL((error, restaurant) => {
+    if (error) { // Got an error!
+      console.error(error);
+    } else {      
+      newMap = L.map('map', {
+        center: [restaurant.latlng.lat, restaurant.latlng.lng],
+        zoom: 16,
+        scrollWheelZoom: false,
+      });
+      L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.jpg70?access_token={mapboxToken}', {
+        mapboxToken: 'pk.eyJ1IjoiZWxsaW1pc3QiLCJhIjoiY2psc2dmbmhhMGZ1YzNwbzRyd3Q4NzY4biJ9.ojVHoAqsHCVB9BfJX_ikWw',
+        maxZoom: 18,
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+          '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+          'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        id: 'mapbox.streets',
+      }).addTo(newMap);
+      fillBreadcrumb();
+      DBHelper.mapMarkerForRestaurant(self.restaurant, newMap);
+    }
+  });
 };
+
+/**
+ * Initialize map as soon as the page is loaded.
+ */
+document.addEventListener('DOMContentLoaded', (event) => {
+  initMap();
+});
