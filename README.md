@@ -26,8 +26,14 @@ Clone the repository and build the project. Images are generated using gulp, so 
     git clone https://github.com/endotnick/mws-restaurant-stage-1.git
     npm install
     npm run build
-### Launch a webserver on port 8000:
+    
+#### Clone and run dev server in a separate folder:
+    git clone https://github.com/udacity/mws-restaurant-stage-2.git
+    npm install
+    npm install sails -g
+    node server
 
+### Launch a webserver on port 8000:
     python3 -m http.server 8000   
 ### Navigate to localhost:8000
 ---
