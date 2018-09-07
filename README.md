@@ -30,7 +30,7 @@ For this stage of the project, I was provided with a static website and made the
 #### Clone the repository and build the project in separate folder: 
 Images are generated using gulp, so you'll need the gulp-cli installed locally (https://gulpjs.com/).
 
-    git clone https://github.com/endotnick/mws-restaurant-stage-1.git
+    git clone https://github.com/endotnick/mws-restaurant.git
     npm install
     npm run build
     
