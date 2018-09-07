@@ -12,6 +12,7 @@ self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(staticCache)
     .then(cache => cache.addAll([
       '/',
+      '/index.html',
       '/build/js/main.js',
       '/build/js/restaurant_info.js',
       '/src/css/styles.css',

@@ -19,3 +19,5 @@ Clone the repository and build the project. Images are generated using gulp, so 
 
     python3 -m http.server 8000   
 ### Navigate to localhost:8000
+
+Icon made by [iconnice](https://www.flaticon.com/authors/iconnice) from www.flaticon.com

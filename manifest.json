@@ -1,0 +1,11 @@
+{
+  "short_name": "Reviews",
+  "name": "UDacity MWS ND project: Restaurant Reviews",
+  "icons": [
+    { "src": "/img/icons/spoon.svg", "sizes": "48x48 72x72 96x96 192x192 256x256 512x512"}
+  ],
+  "start_url": "index.html",
+  "background_color": "#444",
+  "display": "fullscreen",
+  "theme_color": "orange"
+}
