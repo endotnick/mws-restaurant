@@ -6,9 +6,9 @@ For this stage of the project, I was tasked with updating my project to make the
 1. Use server data instead of local memory
 2. Use IndexedDB to cache JSON responses
 3. Meet the minimum performance requirements
-    - Progressive Web App score should be at 90 or better.
-    - Performance score should be at 70 or better.
-    - Accessibility score should be at 90 or better.
+    - Progressive Web App score should be at 90 or better: *currently 91.*
+    - Performance score should be at 70 or better: *currently 95.*
+    - Accessibility score should be at 90 or better: *currently 94.*
 
 ### Previous Stages:
 #### Stage 1
