@@ -52,6 +52,7 @@ self.addEventListener('fetch', (event) => {
     // fetch everything else
     event.respondWith(caches.match(event.request, { ignoreSearch: true })
       .then((response) => {
+        // console.log(response);
         return response || fetch(event.request)
           .then((innerResponse) => {
             return caches.open(staticCache)
@@ -71,7 +72,7 @@ self.addEventListener('fetch', (event) => {
   const handleExternalRequest = (event, id) => {
     event.respondWith(dbPromise
       .then(db => db.transaction('locations').objectStore('locations').get(id))
-      .then(data => (data && data.data) || fetch(event.request)
+      .then(data => (data) || fetch(event.request)
         .then(response => response.json())
         .then(json => dbPromise
           .then((db) => {
