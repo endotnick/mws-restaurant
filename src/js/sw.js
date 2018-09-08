@@ -23,7 +23,6 @@ self.addEventListener('install', (event) => {
       })));
 });
 
-
 self.addEventListener('fetch', (event) => {
   const servePhoto = (request) => {
     const storageUrl = request.url.replace(/-\d+px\.webp$/, '');
@@ -43,13 +42,6 @@ self.addEventListener('fetch', (event) => {
       return;
     }
 
-    // handle restaurant pages
-    /*
-    if (requestUrl.pathname.startsWith('/restaurant.html')) {
-      event.respondWith(caches.match(event.request, { ignoreSearch: true })
-        .then(response => (response || fetch(event.request))));
-    }
-    */
     // fetch everything else
     event.respondWith(caches.match(event.request, { ignoreSearch: true })
       .then((response) => {
@@ -58,7 +50,7 @@ self.addEventListener('fetch', (event) => {
           .then((innerResponse) => {
             return caches.open(staticCache)
               .then((cache) => {
-                if (event.request.url.indexOf('maps') === -1) {
+                if (event.request.url.indexOf('mapbox') === -1) {
                   cache.put(event.request, innerResponse.clone());
                 }
                 return innerResponse;
@@ -79,6 +71,12 @@ self.addEventListener('fetch', (event) => {
           .then((db) => {
             const store = db.transaction('locations', 'readwrite').objectStore('locations');
             store.put(json, id);
+            if (id === -1) { // if we got the full set,
+              // store each element separately
+              json.forEach((restaurant) => {
+                store.put(restaurant, restaurant.id);
+              });
+            }
             return json;
           })))
       .then(response => new Response(JSON.stringify(response)))
@@ -86,7 +84,9 @@ self.addEventListener('fetch', (event) => {
   };
   const requestUrl = new URL(event.request.url);
   if (requestUrl.port === '1337') {
-    handleExternalRequest(event, requestUrl.searchParams.get('id') || 'restaurants');
+    const last = requestUrl.pathname.match(/[^/]+$/)[0];
+    const id = (last === 'restaurants') ? -1 : parseInt(last, 10);
+    handleExternalRequest(event, id);
   } else {
     handleLocalRequest(event, requestUrl);
   }
