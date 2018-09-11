@@ -14,6 +14,18 @@ const registerServiceWorker = () => {
   });
 };
 
+const setClassFavorite = (element, status) => {
+  if (status !== true) {
+    element.classList.remove('favorite');
+    element.classList.add('not_favorite');
+    element.setAttribute('aria-label', 'favorite this restaurant');
+  } else {
+    element.classList.add('favorite');
+    element.classList.remove('not_favorite');
+    element.setAttribute('aria-label', 'remove this restaurant as favorite');
+  }
+};
+
 /**
  * Create restaurant HTML.
  */
@@ -38,6 +50,19 @@ const createRestaurantHTML = (restaurant) => {
   const name = document.createElement('h2');
   name.innerHTML = restaurant.name;
   li.append(name);
+
+  const favorite = document.createElement('button');
+  favorite.innerHTML = '❤';
+  favorite.classList.add('btn_fav');
+  const initStatus = (`${restaurant.is_favorite}`.toLowerCase() === 'true');
+  setClassFavorite(favorite, initStatus);
+  favorite.onclick = () => {
+    const currentStatus = (`${restaurant.is_favorite}`.toLowerCase() === 'true');
+    DBHelper.updateFavorite(restaurant.id, !currentStatus);
+    restaurant.is_favorite = !currentStatus;
+    setClassFavorite(favorite, !currentStatus);
+  };
+  li.append(favorite);
 
   const neighborhood = document.createElement('p');
   neighborhood.innerHTML = restaurant.neighborhood;

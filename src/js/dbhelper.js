@@ -7,8 +7,13 @@ export default class DBHelper {
    * Change this to restaurants.json file location on your server.
    */
   static get DATABASE_URL() {
-    const port = 1337; // Change this to your server port: default 8000
-    return `http://localhost:${port}/restaurants`; // ${port}/data/restaurants.json
+    const port = 1337;
+    return `http://localhost:${port}/restaurants`;
+  }
+
+  static get DATABASE_REVIEWS_URL() {
+    const port = 1337;
+    return `http://localhost:${port}/reviews`;
   }
 
   /**
@@ -149,7 +154,8 @@ export default class DBHelper {
    */
   static mapMarkerForRestaurant(restaurant, map) {
     // https://leafletjs.com/reference-1.3.0.html#marker
-    const marker = new L.marker([restaurant.latlng.lat, restaurant.latlng.lng],
+    const marker = new L.marker(
+      [restaurant.latlng.lat, restaurant.latlng.lng],
       {
         title: restaurant.name,
         alt: restaurant.name,
@@ -158,5 +164,12 @@ export default class DBHelper {
     );
     marker.addTo(map);
     return marker;
+  }
+
+  static updateFavorite(id, status) {
+    const target = `${this.DATABASE_URL}/${id}/?is_favorite=${status}`;
+    fetch(target, {
+      method: 'PUT',
+    });
   }
 }
