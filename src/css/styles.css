@@ -204,6 +204,38 @@ nav h1 a {
   width: 50%;
 }
 
+.btn_fav {
+  display: block;
+  margin: 0.5em;
+  padding: 0.5em 0.7em;
+  border-width: 0;
+  outline: none;
+  border-radius: 1.5em;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .6);
+  
+  background-color: grey;
+  
+  transition: background-color .3s;
+  transition: color .3s;
+}
+
+.not_favorite {
+  color: #ecf0f1;
+}
+.not_favorite:hover {
+  background-color: crimson;
+}
+
+.favorite {
+  color: crimson;
+  background-color: white;
+}
+
+.favorite:hover {  
+  color: #ecf0f1;
+  background-color: grey;
+}
+
 /* ====================== Restaurant Details ====================== */
 .inside header {
   height: 125px;
