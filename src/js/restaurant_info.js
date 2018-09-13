@@ -56,10 +56,16 @@ const createReviewHTML = (review) => {
   return li;
 };
 
+const getReviews = (location) => {
+  const endpoint = `${DBHelper.DATABASE_REVIEWS_URL}/?restaurant_id=${location.id}`;
+  fetch(endpoint)
+    .then(reviews => reviews);
+};
+
 /**
  * Create all reviews HTML and add them to the webpage.
  */
-const fillReviewsHTML = (reviews = self.restaurant.reviews) => {
+const fillReviewsHTML = (reviews = getReviews(self.restaurant)) => {
   const container = document.getElementById('reviews-container');
   const title = document.createElement('h2');
   title.innerHTML = 'Reviews';

@@ -67,14 +67,14 @@ const handleLocalRequest = (event, requestUrl) => {
     }));
 };
 
-const handleExternalRequest = (event, id) => {
+const handleRequest = (event, id, target) => {
   event.respondWith(dbPromise
-    .then(db => db.transaction('locations').objectStore('locations').get(id))
+    .then(db => db.transaction(target).objectStore(target).get(id))
     .then(data => (data) || fetch(event.request)
       .then(response => response.json())
       .then(json => dbPromise
         .then((db) => {
-          const store = db.transaction('locations', 'readwrite').objectStore('locations');
+          const store = db.transaction(target, 'readwrite').objectStore(target);
           store.put(json, id);
           if (id === -1) { // if we got the full set,
             // store each element separately
@@ -86,6 +86,32 @@ const handleExternalRequest = (event, id) => {
         })))
     .then(response => new Response(JSON.stringify(response)))
     .catch(error => new Response(error)));
+};
+
+/*
+const handleReviewRequst = (event, id) => {
+  event.respondWith(dbPromise
+    .then(db => db.transaction('reviews').objectStore('reviews').get(id))
+    .then(data => (data) || fetch(event.request)
+      .then(response => response.json())
+      .then(json => dbPromise
+        .then((db) => {
+          const store = db.transaction('reviews', 'readwrite').objectStore('reviews');
+          store.put(json, id);
+          return json;
+        })))
+    .then(response => new Response(JSON.stringify(response)))
+    .catch(error => new Response(error)));
+};
+*/
+
+const handleExternalRequest = (event, id) => {
+  const requestUrl = new URL(event.request.url);
+  if (requestUrl.href.indexOf('reviews') > -1) {
+    handleRequest(event, id, 'reviews');
+  } else {
+    handleRequest(event, id, 'locations');
+  }
 };
 
 const updateFavorite = (event, query, id) => {
@@ -126,9 +152,14 @@ const create = (event) => {
 
 const read = (event) => {
   const requestUrl = new URL(event.request.url);
+  let id;
   if (requestUrl.port === '1337') {
-    const last = requestUrl.pathname.match(/[^/]+$/)[0];
-    const id = (last === 'restaurants') ? -1 : parseInt(last, 10);
+    if (requestUrl.pathname === '/reviews/') {
+      id = requestUrl.searchParams.get('restaurant_id');
+    } else {
+      const last = requestUrl.pathname.match(/[^/]+$/)[0];
+      id = (last === 'restaurants') ? -1 : parseInt(last, 10);
+    }
     handleExternalRequest(event, id);
   } else {
     handleLocalRequest(event, requestUrl);
