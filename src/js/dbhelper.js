@@ -1,3 +1,16 @@
+import idb from 'idb';
+
+const dbPromise = idb.open('locations-db', 3, (upgradeDb) => {
+  switch (upgradeDb.oldVersion) {
+    case 0:
+      upgradeDb.createObjectStore('locations');
+    case 1:
+      upgradeDb.createObjectStore('reviews');
+    case 2:
+      upgradeDb.createObjectStore('pending');
+  }
+});
+
 /**
  * Common database helper functions.
  */
@@ -14,6 +27,33 @@ export default class DBHelper {
   static get DATABASE_REVIEWS_URL() {
     const port = 1337;
     return `http://localhost:${port}/reviews`;
+  }
+
+  static clearPending() {
+    const store = 'pending';
+    dbPromise
+      .then((db) => {
+        const keyTx = db.transaction(store, 'readwrite').objectStore(store);
+        keyTx.getAllKeys()
+          .then((eventKeys) => {
+            eventKeys.forEach((key) => {
+              const eventTx = db.transaction(store, 'readwrite').objectStore(store);
+              eventTx.get(key)
+                .then((data) => {
+                  fetch(data.url, {
+                    method: data.method,
+                    body: JSON.stringify(data.body),
+                  })
+                    .then((response) => {
+                      if (response.ok) {
+                        const delTx = db.transaction(store, 'readwrite').objectStore(store);
+                        delTx.delete(key);
+                      }
+                    });
+                });
+            });
+          });
+      });
   }
 
   /**
@@ -170,6 +210,14 @@ export default class DBHelper {
     const target = `${this.DATABASE_URL}/${id}/?is_favorite=${status}`;
     fetch(target, {
       method: 'PUT',
+    });
+  }
+
+  static postReview(data) {
+    const target = `${this.DATABASE_REVIEWS_URL}/`;
+    fetch(target, {
+      method: 'POST',
+      body: JSON.stringify(data),
     });
   }
 }

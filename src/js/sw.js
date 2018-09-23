@@ -4,13 +4,14 @@ const staticCache = 'static-cache-v3';
 const imageCache = 'image-cache-v1';
 const allCaches = [staticCache, imageCache];
 
-const dbPromise = idb.open('locations-db', 2, (upgradeDb) => {
+const dbPromise = idb.open('locations-db', 3, (upgradeDb) => {
   switch (upgradeDb.oldVersion) {
     case 0:
       upgradeDb.createObjectStore('locations');
     case 1:
-      const reviewsStore = upgradeDb.createObjectStore('reviews');
-      reviewsStore.createIndex('locations', 'restaurant_id');
+      upgradeDb.createObjectStore('reviews');
+    case 2:
+      upgradeDb.createObjectStore('pending');
   }
 });
 
@@ -49,21 +50,17 @@ const handleLocalRequest = (event, requestUrl) => {
 
   // fetch everything else
   event.respondWith(caches.match(event.request, { ignoreSearch: true })
-    .then((response) => {
-      // console.log(response);
-      return response || fetch(event.request)
-        .then((innerResponse) => {
-          return caches.open(staticCache)
-            .then((cache) => {
-              if (event.request.url.indexOf('mapbox') === -1) {
-                cache.put(event.request, innerResponse.clone());
-              }
-              return innerResponse;
-            });
-        });
-    })
+    .then(response =>
+      response || fetch(event.request)
+        .then(innerResponse => caches.open(staticCache)
+          .then((cache) => {
+            if (event.request.url.indexOf('mapbox') === -1) {
+              cache.put(event.request, innerResponse.clone());
+            }
+            return innerResponse;
+          })))
     .catch((error) => {
-      console.error(error);
+      throw error;
     }));
 };
 
@@ -88,23 +85,6 @@ const handleRequest = (event, id, target) => {
     .catch(error => new Response(error)));
 };
 
-/*
-const handleReviewRequst = (event, id) => {
-  event.respondWith(dbPromise
-    .then(db => db.transaction('reviews').objectStore('reviews').get(id))
-    .then(data => (data) || fetch(event.request)
-      .then(response => response.json())
-      .then(json => dbPromise
-        .then((db) => {
-          const store = db.transaction('reviews', 'readwrite').objectStore('reviews');
-          store.put(json, id);
-          return json;
-        })))
-    .then(response => new Response(JSON.stringify(response)))
-    .catch(error => new Response(error)));
-};
-*/
-
 const handleExternalRequest = (event, id) => {
   const requestUrl = new URL(event.request.url);
   if (requestUrl.href.indexOf('reviews') > -1) {
@@ -114,40 +94,88 @@ const handleExternalRequest = (event, id) => {
   }
 };
 
-const updateFavorite = (event, query, id) => {
-  const status = (query.match(/[^=]+$/)[0].toLowerCase() === 'true');
-  const putData = (data, index) => {
-    dbPromise.then((db) => {
-      const store = db.transaction('locations', 'readwrite').objectStore('locations');
-      store.put(data, index);
-    });
-  };
+const putData = (data, index, store) => {
+  dbPromise.then((db) => {
+    const tx = db.transaction(store, 'readwrite').objectStore(store);
+    tx.put(data, index);
+  });
+};
 
+const updateFavorite = (event, query, id) => {
+  const status = (query.match(/[^=]+$/)[0].toLowerCase() === 'true');  
+  const store = 'locations';
   // update all restaurants
   dbPromise
     .then((db) => {
-      const store = db.transaction('locations', 'readwrite').objectStore('locations');
-      store.get(-1)
+      const tx = db.transaction(store, 'readwrite').objectStore(store);
+      tx.get(-1)
         .then((restaurants) => {
           const restaurant = restaurants.filter(r => r.id === id)[0];
           restaurant.is_favorite = status;
-          putData(restaurants, -1);
+          putData(restaurants, -1, store);
         });
     });
 
   // update individual restaurant
   dbPromise
     .then((db) => {
-      const store = db.transaction('locations', 'readwrite').objectStore('locations');
-      store.get(id)
+      const tx = db.transaction(store, 'readwrite').objectStore(store);
+      tx.get(id)
         .then((restaurant) => {
           restaurant.is_favorite = status;
-          putData(restaurant, id);
+          putData(restaurant, id, store);
         });
     });
 };
-const create = (event) => {
 
+const createReview = (request) => {
+  const store = 'reviews';
+  request.json()
+    .then((body) => {
+      dbPromise
+        .then((db) => {
+          const tx = db.transaction(store, 'readwrite').objectStore(store);
+          const id = `${body.restaurant_id}`;
+          tx.get(id)
+            .then((restaurant) => {
+              restaurant.push(body);
+              putData(restaurant, id, store);
+            });
+        });
+    });
+};
+
+const addPendingUpdate = (request) => {
+  const { url } = request;
+  const { method } = request;
+  const store = 'pending';
+  request.json()
+    .then((body) => {
+      const data = {
+        url,
+        method,
+        body,
+      };
+      putData(data, Date.now(), store);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+const create = (event) => {
+  const requestUrl = new URL(event.request.url);
+  // update local db
+  if (requestUrl.pathname === '/reviews/') {
+    createReview(event.request.clone());
+  }
+  const clone = event.request.clone();
+  // update rest server
+  fetch(event)
+    .catch((error) => {
+      // queue updates if failed
+      addPendingUpdate(clone);
+    });
 };
 
 const read = (event) => {
@@ -170,11 +198,17 @@ const update = (event) => {
   const requestUrl = new URL(event.request.url);
   const query = requestUrl.search;
   const id = parseInt(requestUrl.pathname.match(/restaurants\/(.+)\/$/)[1], 10);
+
+  // update local db
+  if (query.indexOf('favorite') > -1) {
+    updateFavorite(event, query, id);
+  }
+
+  // update rest server
   fetch(event)
-    .then(() => {
-      if (query.indexOf('favorite') > -1) {
-        updateFavorite(event, query, id);
-      }
+    .catch((error) => {
+      // queue updates if failed
+      throw error; // offline
     });
 };
 

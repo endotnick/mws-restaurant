@@ -39,7 +39,7 @@ const createReviewHTML = (review) => {
   header.appendChild(name);
 
   const date = document.createElement('p');
-  date.innerHTML = review.date;
+  date.innerHTML = new Date(review.createdAt).toDateString();
   date.className = 'review-date';
   header.appendChild(date);
 
@@ -56,16 +56,100 @@ const createReviewHTML = (review) => {
   return li;
 };
 
-const getReviews = (location) => {
-  const endpoint = `${DBHelper.DATABASE_REVIEWS_URL}/?restaurant_id=${location.id}`;
-  fetch(endpoint)
-    .then(reviews => reviews);
+const submitReview = () => {
+  const reviewer = document.getElementById('new-review-name').value;
+  const reviewRating = parseInt(document.getElementById('new-review-rating').value, 10);
+  const comment = document.getElementById('new-review-comment').value;
+  const requestUrl = new URL(window.location.href);
+  const id = parseInt(requestUrl.searchParams.get('id'), 10);
+
+  const body = {
+    restaurant_id: id,
+    name: reviewer,
+    createdAt: Date.now(),
+    rating: reviewRating,
+    comments: comment,
+  };
+  DBHelper.postReview(body);
+  window.location.reload();
+};
+
+const createReviewForm = () => {
+  const review = {
+    name: 'Your review!',
+    rating: '?',
+    comments: '',
+    createdAt: Date.now(),
+  };
+
+  const li = createReviewHTML(review);
+  li.removeChild(li.getElementsByClassName('review-comments')[0]);
+  li.removeChild(li.getElementsByClassName('review-rating')[0]);
+  const form = document.createElement('form');
+  form.id = 'new-review-form';
+
+  const nameLabel = document.createElement('label');
+  nameLabel.innerHTML = 'Author: ';
+  nameLabel.name = 'name-title';
+  nameLabel.setAttribute('for', 'new-review-name');
+  nameLabel.className = 'new-review-subtitle';
+  form.appendChild(nameLabel);
+
+  const name = document.createElement('input');
+  name.type = 'text';
+  name.name = 'reviewer-name';
+  name.id = 'new-review-name';
+  form.appendChild(name);
+
+  const ratingLabel = document.createElement('label');
+  ratingLabel.innerHTML = 'Rating: ';
+  ratingLabel.name = 'rating-title';
+  ratingLabel.setAttribute('for', 'new-review-rating');
+  ratingLabel.className = 'new-review-subtitle';
+  form.appendChild(ratingLabel);
+
+  const rating = document.createElement('select');
+  rating.name = 'Rating';
+  rating.id = 'new-review-rating';
+
+  for (let i = 1; i < 6; i += 1) {
+    const option = document.createElement('option');
+    option.text = i;
+    rating.add(option);
+  }
+
+  form.appendChild(rating);
+
+  const br = document.createElement('br');
+  form.appendChild(br);
+
+  const commentLabel = document.createElement('label');
+  commentLabel.innerHTML = 'Comments: ';
+  commentLabel.name = 'comments-title';
+  commentLabel.setAttribute('for', 'new-review-comment');
+  commentLabel.className = 'new-review-subtitle';
+  form.appendChild(commentLabel);
+
+  const comments = document.createElement('textarea');
+  comments.name = 'comment';
+  comments.id = 'new-review-comment';
+  form.appendChild(comments);
+
+  const submit = document.createElement('input');
+  submit.value = 'Submit';
+  submit.id = 'new-review-submit';
+  submit.type = 'button';
+  submit.onclick = () => submitReview();
+  form.appendChild(submit);
+
+  li.appendChild(form);
+  return li;
 };
 
 /**
  * Create all reviews HTML and add them to the webpage.
  */
-const fillReviewsHTML = (reviews = getReviews(self.restaurant)) => {
+const fillReviewsHTML = (reviews) => {
   const container = document.getElementById('reviews-container');
   const title = document.createElement('h2');
   title.innerHTML = 'Reviews';
@@ -78,10 +162,18 @@ const fillReviewsHTML = (reviews = getReviews(self.restaurant)) => {
     return;
   }
   const ul = document.getElementById('reviews-list');
+  ul.appendChild(createReviewForm());
   reviews.forEach((review) => {
     ul.appendChild(createReviewHTML(review));
   });
   container.appendChild(ul);
+};
+
+const getReviews = (location) => {
+  const endpoint = `${DBHelper.DATABASE_REVIEWS_URL}/?restaurant_id=${location.id}`;
+  fetch(endpoint)
+    .then(response => response.json())
+    .then(reviews => fillReviewsHTML(reviews));
 };
 
 /**
@@ -116,7 +208,7 @@ const fillRestaurantHTML = (restaurant = self.restaurant) => {
     fillRestaurantHoursHTML();
   }
   // fill reviews
-  fillReviewsHTML();
+  getReviews(self.restaurant);
 };
 
 /**
@@ -206,4 +298,5 @@ const initMap = () => {
  */
 document.addEventListener('DOMContentLoaded', (event) => {
   initMap();
+  DBHelper.clearPending();
 });

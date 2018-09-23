@@ -1,7 +1,7 @@
 @charset "utf-8";
 /* CSS Document */
 
-body,td,th,p{
+body, td, th, p, label {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 12pt;
 	color: #333;
@@ -363,6 +363,40 @@ nav h1 a {
   text-transform: uppercase;
   font-weight: 600;
   letter-spacing: .1em;
+}
+
+/* ====================== Review Form ====================== */
+#new-review-form {
+  margin: 1em 0;
+  width: 100%;
+}
+
+.new-review-subtitle {
+  display: inline-block;
+  width: 20%;
+  margin: 5px 5%;  
+}
+
+#new-review-name {
+  width: 61%;  
+}
+
+#new-review-comment {
+  width: 80%;
+  margin: 0 8%;
+  resize: none;
+  padding: 0.5em;
+  min-height: 15em;
+}
+
+input[type="button"] {
+  background-color: #444;
+  color: orange;
+  width: 50%;
+  margin: 5px 25%;
+  font-size: 10pt;
+  padding: 10px 0;
+  text-transform: uppercase;  
 }
 
 /* ====================== Responsive ====================== */
