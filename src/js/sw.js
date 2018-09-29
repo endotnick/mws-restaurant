@@ -102,7 +102,7 @@ const putData = (data, index, store) => {
 };
 
 const updateFavorite = (event, query, id) => {
-  const status = (query.match(/[^=]+$/)[0].toLowerCase() === 'true');  
+  const status = (query.match(/[^=]+$/)[0].toLowerCase() === 'true');
   const store = 'locations';
   // update all restaurants
   dbPromise
@@ -128,6 +128,43 @@ const updateFavorite = (event, query, id) => {
     });
 };
 
+const isEquivalent = (obj1, obj2) => {
+  const props1 = Object.getOwnPropertyNames(obj1);
+  const props2 = Object.getOwnPropertyNames(obj2);
+
+  if (props1.length !== props2.length) {
+    return false;
+  }
+
+  for (let i = 0; i < props1.length; i += 1) {
+    const prop = props1[i];
+    if (obj1[prop] !== obj2[prop]) {
+      return false;
+    }
+  }
+
+  return true;
+};
+
+const isPresent = (array, obj) => {
+  for (let i = 0; i < array.length; i += 1) {
+    const entry = array[i];
+    if (entry.createdAt === obj.createdAt) {
+      const body = {
+        comments: entry.comments,
+        createdAt: entry.createdAt,
+        name: entry.name,
+        rating: entry.rating,
+        restaurant_id: entry.restaurant_id,
+      };
+      if (isEquivalent(body, obj)) {
+        return true;
+      }
+    }
+  }
+  return false;
+};
+
 const createReview = (request) => {
   const store = 'reviews';
   request.json()
@@ -138,7 +175,9 @@ const createReview = (request) => {
           const id = `${body.restaurant_id}`;
           tx.get(id)
             .then((restaurant) => {
-              restaurant.push(body);
+              if (!isPresent(restaurant, body)) {
+                restaurant.push(body);
+              }
               putData(restaurant, id, store);
             });
         });
@@ -156,7 +195,7 @@ const addPendingUpdate = (request) => {
         method,
         body,
       };
-      putData(data, Date.now(), store);
+      putData(data, data.body.createdAt, store);
     })
     .catch((error) => {
       console.log(error);

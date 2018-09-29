@@ -40,6 +40,7 @@ export default class DBHelper {
               const eventTx = db.transaction(store, 'readwrite').objectStore(store);
               eventTx.get(key)
                 .then((data) => {
+                  // fetch may be making more entries
                   fetch(data.url, {
                     method: data.method,
                     body: JSON.stringify(data.body),

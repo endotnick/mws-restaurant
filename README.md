@@ -1,16 +1,26 @@
 # Mobile Web Specialist Certification Course
 ---
-## Project Submission: Stage 2
+## Project Submission: Stage 3
+For this stage of the project, the following improvements were made:
+1. Add a form to allow users to submit their own reviews.
+2. Add functionality to defer submission of the form until connection is re-established.
+3. Add functionality to mark a restaurant as a favorite.
+4. Meet the updated performance requirements:
+    - Progressive Web App score should be at 90 or better: *currently 92.*
+    - Performance score should be at 90 or better: *currently 98.*
+    - Accessibility score should be at 90 or better: *currently 94.*
+
+### Previous Stages:
+#### Stage 2
 
 For this stage of the project, I was tasked with updating my project to make the following improvements:
 1. Use server data instead of local memory
 2. Use IndexedDB to cache JSON responses
 3. Meet the minimum performance requirements
-    - Progressive Web App score should be at 90 or better: *currently 91.*
-    - Performance score should be at 70 or better: *currently 95.*
-    - Accessibility score should be at 90 or better: *currently 94.*
+    - Progressive Web App score should be at 90 or better: *at 91 when submitted.*
+    - Performance score should be at 70 or better: *at 95 when submitted.*
+    - Accessibility score should be at 90 or better: *at 94 when submitted.*
 
-### Previous Stages:
 #### Stage 1
 
 For this stage of the project, I was provided with a static website and made the following improvements:
@@ -22,7 +32,7 @@ For this stage of the project, I was provided with a static website and made the
 ---
 ### Installation:
 #### Clone and run dev server:
-    git clone https://github.com/udacity/mws-restaurant-stage-2.git
+    git clone https://github.com/udacity/mws-restaurant-stage-3.git
     npm install
     npm install sails -g
     node server
