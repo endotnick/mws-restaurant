@@ -222,7 +222,7 @@ const read = (event) => {
   let id = null;
   if (requestUrl.pathname === '/reviews/') {
     id = requestUrl.searchParams.get('restaurant_id');
-  } else {
+  } else if (requestUrl.pathname === '/restaurants/') {
     const last = requestUrl.pathname.match(/[^/]+$/)[0];
     id = (last === 'restaurants') ? -1 : parseInt(last, 10);
   }
