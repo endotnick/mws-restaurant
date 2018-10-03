@@ -1,11 +1,14 @@
 {
   "name": "mws-restaurant",
   "version": "0.1.0",
+  "main": "server.js",
   "scripts": {
-    "start": "static",
     "dev": "gulp",
     "build": "gulp prod",
     "postinstall": "gulp prod"
+  },
+  "engines": {
+    "node": "10.11.0"
   },
   "repository": {
     "type": "git",
