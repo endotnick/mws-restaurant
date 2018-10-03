@@ -219,14 +219,14 @@ const create = (event) => {
 
 const read = (event) => {
   const requestUrl = new URL(event.request.url);
-  let id = null;
-  if (requestUrl.pathname === '/reviews/') {
-    id = requestUrl.searchParams.get('restaurant_id');
-  } else if (requestUrl.pathname === '/restaurants/') {
-    const last = requestUrl.pathname.match(/[^/]+$/)[0];
-    id = (last === 'restaurants') ? -1 : parseInt(last, 10);
-  }
-  if (id != null) {
+  let id;
+  if (requestUrl.port === '1337') {
+    if (requestUrl.pathname === '/reviews/') {
+      id = requestUrl.searchParams.get('restaurant_id');
+    } else {
+      const last = requestUrl.pathname.match(/[^/]+$/)[0];
+      id = (last === 'restaurants') ? -1 : parseInt(last, 10);
+    }
     handleExternalRequest(event, id);
   } else {
     handleLocalRequest(event, requestUrl);
