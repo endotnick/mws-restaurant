@@ -11,7 +11,6 @@ const dbPromise = idb.open('locations-db', 3, (upgradeDb) => {
   }
 });
 
-const server = 'https://mws-sails-server.herokuapp.com';
 /**
  * Common database helper functions.
  */
@@ -20,13 +19,14 @@ export default class DBHelper {
    * Database URL.
    * Change this to restaurants.json file location on your server.
    */
-
   static get DATABASE_URL() {
-    return `${server}/restaurants`;
+    const port = 1337;
+    return `http://localhost:${port}/restaurants`;
   }
 
   static get DATABASE_REVIEWS_URL() {
-    return `${server}/reviews`;
+    const port = 1337;
+    return `http://localhost:${port}/reviews`;
   }
 
   static clearPending() {

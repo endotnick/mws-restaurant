@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "scripts": {
     "dev": "gulp",
-    "build": "gulp prod"
+    "build": "gulp prod",
+    "postinstall": "gulp prod"
   },
   "repository": {
     "type": "git",
