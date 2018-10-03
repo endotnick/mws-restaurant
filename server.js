@@ -1,3 +1,4 @@
+const relic = require('newrelic');
 const server = require('node-static');
 const http = require('http');
 
