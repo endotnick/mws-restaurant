@@ -1,5 +1,9 @@
 # Mobile Web Specialist Certification Course
----
+
+## Live Demo:
+Please note that this app is currently hosted on Heroku's free tier, so the first load will be weird while the dynos spin up, it should run normally after about 20 seconds.  
+https://mws-reviews.herokuapp.com
+
 ## Project Submission: Stage 3
 For this stage of the project, the following improvements were made:
 1. Add a form to allow users to submit their own reviews.
@@ -28,7 +32,7 @@ For this stage of the project, I was provided with a static website and made the
 2. Improved accessibilty for all users
 3. Implemented a Service Worker to cache and serve static assets
 
-## To Run:
+## To Run Locally:
 ---
 ### Installation:
 #### Clone and run dev server:
