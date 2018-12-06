@@ -1,6 +1,7 @@
 # Mobile Web Specialist Certification Course
 
 ## Live Demo:
+![](restaurant_reviews.gif)
 Please note that this app is currently hosted on Heroku's free tier, so the first load will be weird while the dynos spin up, it should run normally after about 20 seconds.  
 https://mws-reviews.herokuapp.com
 
