@@ -30,7 +30,7 @@ For this stage of the project, I was tasked with updating my project to make the
 
 For this stage of the project, I was provided with a static website and made the following improvements:
 1. Made the site fully responsive
-2. Improved accessibilty for all users
+2. Improved accessibility for all users
 3. Implemented a Service Worker to cache and serve static assets
 
 ## To Run Locally:
